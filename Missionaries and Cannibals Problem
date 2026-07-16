@@ -1,0 +1,65 @@
+from collections import deque
+
+def is_valid(state):
+    M_left, C_left, boat = state
+    M_right = 3 - M_left
+    C_right = 3 - C_left
+
+    if M_left < 0 or C_left < 0 or M_left > 3 or C_left > 3:
+        return False
+
+    if M_left > 0 and M_left < C_left:
+        return False
+
+    if M_right > 0 and M_right < C_right:
+        return False
+
+    return True
+
+def get_next_states(state):
+    M_left, C_left, boat = state
+    moves = [(2,0), (1,0), (0,2), (0,1), (1,1)]
+    next_states = []
+
+    for m, c in moves:
+        if boat == 1:
+            new_state = (M_left - m, C_left - c, 0)
+        else:
+            new_state = (M_left + m, C_left + c, 1)
+
+        if is_valid(new_state):
+            next_states.append(new_state)
+
+    return next_states
+
+def bfs():
+    start = (3, 3, 1)
+    goal = (0, 0, 0)
+
+    queue = deque([(start, [])])
+    visited = set()
+
+    while queue:
+        state, path = queue.popleft()
+
+        if state == goal:
+            return path + [state]
+
+        if state not in visited:
+            visited.add(state)
+
+            for next_state in get_next_states(state):
+                queue.append((next_state, path + [state]))
+
+    return None
+
+solution = bfs()
+
+if solution:
+    print("Solution Found:\n")
+    for step in solution:
+        M_left, C_left, boat = step
+        side = "Left" if boat == 1 else "Right"
+        print(f"Missionaries Left: {M_left}, Cannibals Left: {C_left}, Boat: {side}")
+else:
+    print("No Solution")
