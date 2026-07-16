@@ -1,0 +1,40 @@
+from collections import deque
+
+def water_jug():
+    visited = set()
+    queue = deque()
+
+    # Initial state (4L jug, 3L jug)
+    queue.append((0, 0, []))
+
+    while queue:
+        x, y, path = queue.popleft()
+
+        if (x, y) in visited:
+            continue
+
+        visited.add((x, y))
+        path = path + [(x, y)]
+
+        # Goal: Exactly 2 liters in either jug
+        if x == 2 or y == 2:
+            print("Goal Reached!\n")
+            print("Steps:")
+            for state in path:
+                print(state)
+            return
+
+        next_states = [
+            (4, y),                          # Fill 4L jug
+            (x, 3),                          # Fill 3L jug
+            (0, y),                          # Empty 4L jug
+            (x, 0),                          # Empty 3L jug
+            (x - min(x, 3 - y), y + min(x, 3 - y)),  # Pour 4L -> 3L
+            (x + min(y, 4 - x), y - min(y, 4 - x))   # Pour 3L -> 4L
+        ]
+
+        for state in next_states:
+            if state not in visited:
+                queue.append((state[0], state[1], path))
+
+water_jug()
