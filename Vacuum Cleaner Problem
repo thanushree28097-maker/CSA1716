@@ -1,0 +1,36 @@
+# Vacuum Cleaner Problem
+
+def vacuum_cleaner():
+    rooms = {
+        'A': input("Enter status of Room A (Clean/Dirty): ").strip().lower(),
+        'B': input("Enter status of Room B (Clean/Dirty): ").strip().lower()
+    }
+
+    current_room = input("Enter current room (A/B): ").strip().upper()
+
+    while True:
+        if rooms[current_room] == "dirty":
+            print(f"Room {current_room} is Dirty.")
+            print("Action: SUCK")
+            rooms[current_room] = "clean"
+        else:
+            print(f"Room {current_room} is already Clean.")
+
+        if current_room == "A":
+            if rooms["B"] == "dirty":
+                print("Move Right to Room B")
+                current_room = "B"
+            else:
+                break
+        else:
+            if rooms["A"] == "dirty":
+                print("Move Left to Room A")
+                current_room = "A"
+            else:
+                break
+
+    print("\nFinal Room Status:")
+    print("Room A:", rooms["A"].capitalize())
+    print("Room B:", rooms["B"].capitalize())
+
+vacuum_cleaner()
